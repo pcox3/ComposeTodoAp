@@ -8,6 +8,8 @@ Quite simple with no complex entities or components.
   <img src="Screenshot_20250805_145506.png" alt="Logo" width="250"/>
   <img src="Screenshot_20250805_145515.png" alt="Logo" width="250"/>
   <img src="Screenshot_20250805_145743.png" alt="Logo" width="250"/>
+  <img src="Screenshot_20250805_184741.png" alt="Logo" width="250"/>
+  <img src="Screenshot_20250805_184755.png" alt="Logo" width="250"/>
 </p>
 
 
