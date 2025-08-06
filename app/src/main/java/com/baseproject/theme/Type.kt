@@ -52,9 +52,8 @@ val typography = Typography(
     ),
     labelSmall = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Medium,
+        fontWeight = FontWeight.W200,
         fontSize = smallestText.value.sp,
-        lineHeight = 16.sp,
         letterSpacing = 0.5.sp
     ),
     labelMedium = TextStyle(
@@ -67,7 +66,7 @@ val typography = Typography(
     headlineSmall = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.W300,
-        fontSize = smallText.value.sp,
+        fontSize = smallestText.value.sp,
         lineHeight = 32.sp,
         letterSpacing = 0.sp
     ),

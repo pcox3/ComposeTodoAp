@@ -13,8 +13,7 @@ class TaskViewModel(application: Application) : AndroidViewModel(application) {
     suspend fun insertTask(task: Task) = taskDao.insertTask(task)
     suspend fun updateTask(task: Task) = taskDao.updateTask(
         id = task.id,
-        title = task.title,
-        description = task.description,
+        updatedAt = task.updatedAt,
         isCompleted = task.isCompleted
     )
     suspend fun deleteTask(task: Task) = taskDao.deleteTask(task)

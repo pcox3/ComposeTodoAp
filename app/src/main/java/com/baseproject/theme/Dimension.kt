@@ -4,12 +4,13 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-val smallestText = 12.sp
+val smallestText = 10.sp
 val smallText = 14.sp
 val mediumText: TextUnit = 16.sp
 val largeText = 20.sp
 val extraLargeText = 24.sp
 
+val miniSpacing = 3.dp
 val smallSpacing = 5.dp
 val mediumSpacing = 10.dp
 val largeSpacing = 20.dp
