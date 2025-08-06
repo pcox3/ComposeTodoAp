@@ -50,7 +50,7 @@ import kotlinx.coroutines.withContext
 fun HomeScreen(taskViewModel: TaskViewModel = viewModel()){
     var showSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
-    val scope = rememberCoroutineScope()
+    val coroutineScope = rememberCoroutineScope()
     val tasks by taskViewModel.getAllTasks().observeAsState(initial = emptyList())
 
     Box(modifier = Modifier
@@ -68,7 +68,7 @@ fun HomeScreen(taskViewModel: TaskViewModel = viewModel()){
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
-                        scope.launch {
+                        coroutineScope.launch {
                             withContext(Dispatchers.IO) {
                                 taskViewModel.deleteAllTasks()
                             }
@@ -109,7 +109,7 @@ fun HomeScreen(taskViewModel: TaskViewModel = viewModel()){
             modifier = Modifier.align(Alignment.BottomEnd),
             onClick = {
                 showSheet = true
-                scope.launch { sheetState.show() }
+                coroutineScope.launch { sheetState.show() }
             }, shape = RoundedCornerShape(extraLargeRadius)
         ) {
             Image(painter = painterResource(id = R.drawable.ic_add),
@@ -120,7 +120,7 @@ fun HomeScreen(taskViewModel: TaskViewModel = viewModel()){
     if (showSheet) {
         ModalBottomSheet(
             onDismissRequest = {
-                scope.launch {
+                coroutineScope.launch {
                     showSheet = false
                     sheetState.hide()
                 }
@@ -129,7 +129,7 @@ fun HomeScreen(taskViewModel: TaskViewModel = viewModel()){
         ) {
             NewTaskScreen(
                 dismiss = {
-                    scope.launch {
+                    coroutineScope.launch {
                         sheetState.hide()
                         showSheet = false
                     }

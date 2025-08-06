@@ -56,10 +56,10 @@ fun NewTaskScreen(
     viewModel: TaskViewModel = viewModel()
 ) {
     var taskName by remember { mutableStateOf("") }
-    var isError by remember { mutableStateOf(false) }
-    var description by remember { mutableStateOf("") }
+    var isTextFieldError by remember { mutableStateOf(false) }
+    var descriptionLabel by remember { mutableStateOf("") }
     var selectedCategory by remember { mutableStateOf("Personal") }
-    val scope = rememberCoroutineScope()
+    val coroutineScope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
 
     Column(
@@ -85,7 +85,7 @@ fun NewTaskScreen(
         OutlineInputField(
             focusManager = focusManager,
             value = taskName,
-            isError = isError,
+            isError = isTextFieldError,
             onValueChange = { taskName = it },
             imeAction = ImeAction.Next,
             placeholder = "Add Task Name...",
@@ -108,9 +108,9 @@ fun NewTaskScreen(
 
         OutlineInputField(
             focusManager = focusManager,
-            value = description,
+            value = descriptionLabel,
             modifier = Modifier.height(100.dp),
-            onValueChange = { description = it },
+            onValueChange = { descriptionLabel = it },
             imeAction = ImeAction.Done,
             placeholder = "Add Descriptions..",
         )
@@ -130,13 +130,13 @@ fun NewTaskScreen(
             Button(
                 onClick = {
                     if (taskName.isEmpty()) {
-                        isError = true
+                        isTextFieldError = true
                         return@Button
                     }
-                    scope.launch {
+                    coroutineScope.launch {
                         withContext(Dispatchers.IO){
                             viewModel.insertTask(
-                                Task(title = taskName, description = description,
+                                Task(title = taskName, description = descriptionLabel,
                                     dateTime = convertTimeInMillisToStringDate())
                             )
                         }

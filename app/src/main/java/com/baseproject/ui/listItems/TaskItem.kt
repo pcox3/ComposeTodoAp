@@ -26,7 +26,6 @@ import com.baseproject.data.models.Task
 import com.baseproject.theme.largeSpacing
 import com.baseproject.theme.miniSpacing
 import com.baseproject.theme.onSecondaryColor
-import com.baseproject.theme.smallSpacing
 import com.baseproject.utility.convertTimeInMillisToStringDate
 import com.baseproject.viewModel.TaskViewModel
 import kotlinx.coroutines.Dispatchers
@@ -44,7 +43,7 @@ fun TaskItem(
         isCompleted = false
     )
 ) {
-    val scope = rememberCoroutineScope()
+    val coroutineScope = rememberCoroutineScope()
     var isChecked by remember { mutableStateOf(task.isCompleted) }
 
     Surface(
@@ -79,7 +78,7 @@ fun TaskItem(
             RadioButton(
                 selected = isChecked,
                 onClick = {
-                    scope.launch {
+                    coroutineScope.launch {
                         isChecked = !isChecked
                         withContext(Dispatchers.IO){
                             taskViewModel.updateTask(task.copy(isCompleted = isChecked,
