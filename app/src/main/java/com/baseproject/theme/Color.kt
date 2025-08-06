@@ -24,7 +24,7 @@ val surfaceContainerLow = Color(255, 254, 232)
 val selectedColor = Color(244, 237, 180)
 val onSelectedColor = Color(149, 140, 80)
 val unselectedColor = Color(253, 249, 227, 0x0000008b)
-val onUnselectedColor = Color(149, 140, 80, 0x00000047)
+val onUnselectedColor = Color(0xEF, 0xEB, 0xCC, 0x7E)
 
 val successColor = Color(0xae62b14c)
 val errorColor = Color(0xabfc4736)
