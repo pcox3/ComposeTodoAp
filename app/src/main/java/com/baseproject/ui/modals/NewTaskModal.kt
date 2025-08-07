@@ -1,5 +1,6 @@
 package com.baseproject.ui.modals
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -35,6 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.baseproject.appManager.TaskReminder
 import com.baseproject.data.models.Task
 import com.baseproject.theme.extraLargeSpacing
 import com.baseproject.theme.mediumSpacing
@@ -52,6 +54,7 @@ import kotlinx.coroutines.withContext
 
 @Composable
 fun NewTaskScreen(
+    context: Context? = null,
     dismiss: () -> Unit = {},
     viewModel: TaskViewModel = viewModel()
 ) {
@@ -135,10 +138,11 @@ fun NewTaskScreen(
                     }
                     coroutineScope.launch {
                         withContext(Dispatchers.IO){
-                            viewModel.insertTask(
-                                Task(title = taskName, description = descriptionLabel,
-                                    dateTime = convertTimeInMillisToStringDate())
-                            )
+                            Task(title = taskName, description = descriptionLabel,
+                                dateTime = convertTimeInMillisToStringDate()).apply {
+                                 viewModel.insertTask(this)
+                                TaskReminder(context).scheduleReminder(this)
+                            }
                         }
                     }
                     dismiss()

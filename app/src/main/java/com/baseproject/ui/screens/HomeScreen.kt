@@ -1,5 +1,7 @@
 package com.baseproject.ui.screens
 
+import android.app.Activity
+import android.os.Build
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -22,6 +24,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -30,6 +33,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -40,6 +44,7 @@ import com.baseproject.theme.smallSpacing
 import com.baseproject.todoapp.R
 import com.baseproject.ui.listItems.TaskItem
 import com.baseproject.ui.modals.NewTaskScreen
+import com.baseproject.utility.askNotificationPermission
 import com.baseproject.viewModel.TaskViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,11 +52,20 @@ import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(taskViewModel: TaskViewModel = viewModel()){
+fun HomeScreen(
+    taskViewModel: TaskViewModel = viewModel()
+){
     var showSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
     val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
     val tasks by taskViewModel.getAllTasks().observeAsState(initial = emptyList())
+
+    LaunchedEffect(key1 = true){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            askNotificationPermission(context as Activity)
+        }
+    }
 
     Box(modifier = Modifier
         .padding(largeSpacing)
@@ -81,27 +95,26 @@ fun HomeScreen(taskViewModel: TaskViewModel = viewModel()){
 
             Spacer(modifier = Modifier.padding(smallSpacing))
 
-            LazyColumn(
-                modifier = Modifier.fillMaxHeight(),
-                verticalArrangement = Arrangement.spacedBy(mediumSpacing)
-            ) {
-                items(tasks) { task ->
-                    if (tasks.isEmpty()){
-                        Column(
-                            modifier = Modifier.fillMaxWidth()
-                                .fillMaxHeight(),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text("No tasks to show")
-                        }
-                    }else{
+            if (tasks.isEmpty()){
+                Column(
+                    modifier = Modifier.fillMaxWidth()
+                        .fillMaxHeight(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text("No tasks to show")
+                }
+            }else{
+                LazyColumn(
+                    modifier = Modifier.fillMaxHeight(),
+                    verticalArrangement = Arrangement.spacedBy(mediumSpacing)
+                ) {
+                    items(tasks) { task ->
                         TaskItem(
                             taskViewModel, task)
                     }
                 }
             }
-
 
         }
 
@@ -128,6 +141,7 @@ fun HomeScreen(taskViewModel: TaskViewModel = viewModel()){
             sheetState = sheetState
         ) {
             NewTaskScreen(
+                context,
                 dismiss = {
                     coroutineScope.launch {
                         sheetState.hide()
